@@ -15,10 +15,10 @@ body {
 
 .app-shell {
   width: 100%;
-  max-width: 480px;
+  max-width: 100%;
   margin: 0 auto;
   min-height: 100vh;
-  padding: 14px 14px 90px;
+  padding: 16px 16px 100px;
   background: #0b0b0c;
 }
 
@@ -27,21 +27,21 @@ body {
 }
 
 .app-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   color: #ffffff;
 }
 
 .app-subtitle {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 13px;
   color: #9b9b9b;
 }
 
 .balance-card {
   background: linear-gradient(180deg, #1e1f23 0%, #15161a 100%);
   border-radius: 24px;
-  padding: 28px 18px;
+  padding: 30px 20px;
   text-align: center;
   margin-top: 8px;
   margin-bottom: 14px;
@@ -56,14 +56,14 @@ body {
 }
 
 .balance-amount {
-  font-size: 46px;
+  font-size: 50px;
   font-weight: 800;
   line-height: 1;
   margin-bottom: 10px;
 }
 
 .balance-hint {
-  font-size: 12px;
+  font-size: 13px;
   color: #8d8d8d;
 }
 
@@ -74,14 +74,14 @@ body {
   color: #ffffff;
   padding: 16px;
   border-radius: 18px;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
   margin-bottom: 14px;
 }
 
 .result-count {
   color: #a8a8a8;
-  font-size: 14px;
+  font-size: 15px;
   margin: 0 4px 14px;
 }
 
@@ -91,22 +91,20 @@ body {
 
 .page-container h2 {
   margin-top: 0;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
 }
 
 .page-container p {
   color: #b0b0b0;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .bottom-nav {
   position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   bottom: 0;
   width: 100%;
-  max-width: 480px;
   background: #111216;
   border-top: 1px solid #1c1d22;
   display: grid;
@@ -204,6 +202,18 @@ body {
 }
 
 @media (max-width: 420px) {
+  .app-shell {
+    padding: 14px 14px 95px;
+  }
+
+  .app-title {
+    font-size: 20px;
+  }
+
+  .app-subtitle {
+    font-size: 12px;
+  }
+
   .balance-amount {
     font-size: 38px;
   }
@@ -219,5 +229,61 @@ body {
   .details-btn {
     font-size: 18px;
     padding: 18px 14px;
+  }
+}
+
+@media (min-width: 768px) {
+  .app-shell {
+    max-width: 900px;
+    padding: 24px 24px 110px;
+  }
+
+  .app-title {
+    font-size: 28px;
+  }
+
+  .app-subtitle {
+    font-size: 14px;
+  }
+
+  .balance-card {
+    padding: 36px 24px;
+  }
+
+  .balance-amount {
+    font-size: 64px;
+  }
+
+  .filter-btn {
+    font-size: 18px;
+    padding: 18px;
+  }
+
+  .result-count {
+    font-size: 17px;
+  }
+
+  .page-container h2 {
+    font-size: 32px;
+  }
+
+  .order-title {
+    font-size: 34px;
+  }
+
+  .order-date {
+    font-size: 20px;
+  }
+
+  .details-btn {
+    font-size: 24px;
+    padding: 24px 18px;
+  }
+
+  .bottom-nav {
+    max-width: 900px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 18px 18px 0 0;
   }
 }
