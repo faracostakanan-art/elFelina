@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+const API_URL = "https://felina-backend-production.up.railway.app";
+
 export default function Admin() {
   const [password, setPassword] = useState("");
   const [title, setTitle] = useState("");
@@ -12,7 +14,7 @@ export default function Admin() {
 
   const loadProducts = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/admin/products");
+      const res = await fetch(`${API_URL}/api/admin/products`);
       const data = await res.json();
       setProducts(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -45,7 +47,7 @@ export default function Admin() {
         formData.append("image", imageFile);
       }
 
-      const res = await fetch("http://localhost:3001/api/admin/products", {
+      const res = await fetch(`${API_URL}/api/admin/products`, {
         method: "POST",
         body: formData
       });
@@ -73,7 +75,7 @@ export default function Admin() {
     setMessage("");
 
     try {
-      const res = await fetch(`http://localhost:3001/api/admin/products/${id}`, {
+      const res = await fetch(`${API_URL}/api/admin/products/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
