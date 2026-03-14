@@ -198,6 +198,21 @@ export default function App() {
           <div className="page-container">
             {products.map((product) => (
               <div className="order-card" key={product.id}>
+                {product.image_url ? (
+                  <img
+                    src={product.image_url}
+                    alt={product.title}
+                    style={{
+                      width: "100%",
+                      borderRadius: "18px",
+                      marginBottom: "16px",
+                      display: "block",
+                      objectFit: "cover",
+                      maxHeight: "220px"
+                    }}
+                  />
+                ) : null}
+
                 <div className="order-top">
                   <div>
                     <div className="order-title">{product.title}</div>
@@ -232,6 +247,21 @@ export default function App() {
             <>
               {cart.map((item) => (
                 <div className="order-card" key={item.id}>
+                  {item.image_url ? (
+                    <img
+                      src={item.image_url}
+                      alt={item.title}
+                      style={{
+                        width: "100%",
+                        borderRadius: "18px",
+                        marginBottom: "16px",
+                        display: "block",
+                        objectFit: "cover",
+                        maxHeight: "220px"
+                      }}
+                    />
+                  ) : null}
+
                   <div className="order-top">
                     <div>
                       <div className="order-title">{item.title}</div>
