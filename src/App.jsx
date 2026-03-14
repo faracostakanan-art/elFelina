@@ -204,11 +204,11 @@ export default function App() {
                     alt={product.title}
                     style={{
                       width: "100%",
-                      borderRadius: "18px",
-                      marginBottom: "16px",
+                      borderRadius: "16px",
+                      marginBottom: "12px",
                       display: "block",
                       objectFit: "cover",
-                      maxHeight: "220px"
+                      maxHeight: "170px"
                     }}
                   />
                 ) : null}
@@ -253,11 +253,11 @@ export default function App() {
                       alt={item.title}
                       style={{
                         width: "100%",
-                        borderRadius: "18px",
-                        marginBottom: "16px",
+                        borderRadius: "16px",
+                        marginBottom: "12px",
                         display: "block",
                         objectFit: "cover",
-                        maxHeight: "220px"
+                        maxHeight: "170px"
                       }}
                     />
                   ) : null}
