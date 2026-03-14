@@ -12,6 +12,9 @@ export default function Admin() {
   const [message, setMessage] = useState("");
   const [products, setProducts] = useState([]);
 
+  const [userIdForBalance, setUserIdForBalance] = useState("");
+  const [balanceAmount, setBalanceAmount] = useState("");
+
   const loadProducts = async () => {
     try {
       const res = await fetch(`${API_URL}/api/admin/products`);
@@ -97,6 +100,42 @@ export default function Admin() {
     }
   };
 
+  const addBalance = async () => {
+    setMessage("");
+
+    if (!password || !userIdForBalance || !balanceAmount) {
+      setMessage("Remplis le mot de passe, l'ID utilisateur et le montant.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/api/admin/add-balance`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          password,
+          user_id: userIdForBalance,
+          amount: parseFloat(balanceAmount)
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setMessage(`Solde ajouté. Nouveau solde : ${Number(data.user.balance).toFixed(2)}€`);
+        setUserIdForBalance("");
+        setBalanceAmount("");
+      } else {
+        setMessage(data.error || "Erreur lors de l'ajout du solde.");
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage("Erreur de connexion au serveur API.");
+    }
+  };
+
   return (
     <div style={{ padding: "20px", color: "white", background: "#111", minHeight: "100vh" }}>
       <h1>Admin Panel</h1>
@@ -155,6 +194,28 @@ export default function Admin() {
 
       <hr style={{ margin: "30px 0" }} />
 
+      <h2>Ajouter du solde à un utilisateur</h2>
+
+      <input
+        type="text"
+        placeholder="ID utilisateur Telegram"
+        value={userIdForBalance}
+        onChange={(e) => setUserIdForBalance(e.target.value)}
+      />
+      <br /><br />
+
+      <input
+        type="number"
+        placeholder="Montant"
+        value={balanceAmount}
+        onChange={(e) => setBalanceAmount(e.target.value)}
+      />
+      <br /><br />
+
+      <button onClick={addBalance}>Ajouter le solde</button>
+
+      <hr style={{ margin: "30px 0" }} />
+
       <h2>Produits existants</h2>
 
       {products.map((product) => (
@@ -190,7 +251,11 @@ export default function Admin() {
         </div>
       ))}
 
-      {!!message && <p style={{ marginTop: "20px", color: "#ffd166" }}>{message}</p>}
+      {!!message && (
+        <p style={{ marginTop: "20px", color: "#ffd166" }}>
+          {message}
+        </p>
+      )}
     </div>
   );
 }
