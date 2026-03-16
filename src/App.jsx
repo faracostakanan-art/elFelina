@@ -208,7 +208,7 @@ export default function App() {
                       marginBottom: "12px",
                       display: "block",
                       objectFit: "cover",
-                      maxHeight: "170px"
+                      maxHeight: "145px"
                     }}
                   />
                 ) : null}
@@ -257,7 +257,7 @@ export default function App() {
                         marginBottom: "12px",
                         display: "block",
                         objectFit: "cover",
-                        maxHeight: "170px"
+                        maxHeight: "145px"
                       }}
                     />
                   ) : null}
