@@ -325,69 +325,86 @@ export default function App() {
                 </div>
               </div>
 
-              {(selectedOrder.items || []).map((item) => (
-                <div key={item.id} style={{ marginTop: "18px" }}>
-                  {item.image_url ? (
-                    <img
-                      src={item.image_url}
-                      alt={item.title}
-                      style={{
-                        width: "100%",
-                        borderRadius: "18px",
-                        marginBottom: "16px",
-                        display: "block",
-                        objectFit: "cover",
-                        maxHeight: "170px"
-                      }}
-                    />
-                  ) : null}
+              {(selectedOrder.items || []).map((item) => {
+                let parsedContent = null;
 
-                  <div className="order-detail-main-row">
-                    <div className="order-detail-product">
-                      <div className="order-detail-product-title">{item.title}</div>
-                      <div className="order-detail-product-subtitle">
-                        {item.subtitle}
+                try {
+                  parsedContent = JSON.parse(item.hidden_content || "{}");
+                } catch (e) {
+                  parsedContent = null;
+                }
+
+                const detailTitle = parsedContent?.title || item.title;
+                const detailPrice =
+                  parsedContent?.monthly_price || `€${Number(item.price).toFixed(2)}`;
+                const detailBadges = Array.isArray(parsedContent?.badges)
+                  ? parsedContent.badges
+                  : [];
+                const detailFields = Array.isArray(parsedContent?.fields)
+                  ? parsedContent.fields
+                  : [];
+
+                return (
+                  <div key={item.id} style={{ marginTop: "18px" }}>
+                    {item.image_url ? (
+                      <img
+                        src={item.image_url}
+                        alt={detailTitle}
+                        style={{
+                          width: "100%",
+                          borderRadius: "18px",
+                          marginBottom: "16px",
+                          display: "block",
+                          objectFit: "cover",
+                          maxHeight: "170px"
+                        }}
+                      />
+                    ) : null}
+
+                    <div className="product-mini-card">
+                      <div className="product-mini-header">
+                        <div className="product-mini-header-left">
+                          <div className="product-mini-title">{detailTitle}</div>
+
+                          {detailBadges.length > 0 ? (
+                            <div className="product-mini-badges">
+                              {detailBadges.map((badge, index) => (
+                                <div className="product-mini-badge" key={index}>
+                                  {badge}
+                                </div>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+
+                        <div className="product-mini-price">{detailPrice}</div>
                       </div>
+
+                      {detailFields.length > 0 ? (
+                        <div className="product-mini-grid">
+                          {detailFields.map((field, index) => (
+                            <div className="product-mini-row" key={index}>
+                              <div className="product-mini-label">
+                                {field?.label || "Champ"}
+                              </div>
+                              <div className="product-mini-value">
+                                {field?.value || "-"}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="order-detail-content-box">
+                          <div className="order-detail-content-label">Contenu livré</div>
+                          <pre className="order-detail-content-text">
+                            {item.hidden_content}
+                          </pre>
+                        </div>
+                      )}
                     </div>
-
-                    <div className="order-detail-price">
-                      €{Number(item.price).toFixed(2)}
-                    </div>
                   </div>
-
-                  <div className="order-detail-row">
-                    <span>Référence</span>
-                    <strong>CMD-{selectedOrder.id}-{item.id}</strong>
-                  </div>
-
-                  <div className="order-detail-row">
-                    <span>Statut</span>
-                    <strong>{selectedOrder.status}</strong>
-                  </div>
-
-                  <div className="order-detail-row">
-                    <span>Date</span>
-                    <strong>{selectedOrder.created_at}</strong>
-                  </div>
-
-                  <div className="order-detail-row">
-                    <span>Produit</span>
-                    <strong>{item.title}</strong>
-                  </div>
-
-                  <div className="order-detail-row">
-                    <span>Sous-titre</span>
-                    <strong>{item.subtitle || "-"}</strong>
-                  </div>
-
-                  <div className="order-detail-content-box">
-                    <div className="order-detail-content-label">Contenu livré</div>
-                    <pre className="order-detail-content-text">
-                      {item.hidden_content}
-                    </pre>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
 
               <button
                 className="details-btn"
