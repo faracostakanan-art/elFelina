@@ -309,35 +309,90 @@ export default function App() {
           <h1 className="orders-heading">Commandes</h1>
 
           {selectedOrder ? (
-            <div className="order-card">
-              <div className="order-top">
+            <div className="order-detail-card">
+              <div className="order-detail-header">
                 <div>
-                  <div className="order-title">Commande #{selectedOrder.id}</div>
-                  <div className="order-date">{selectedOrder.created_at}</div>
+                  <div className="order-detail-title">
+                    Commande #{selectedOrder.id}
+                  </div>
+                  <div className="order-detail-subtitle">
+                    {selectedOrder.created_at}
+                  </div>
                 </div>
-                <div className="status-badge done">{selectedOrder.status}</div>
+
+                <div className="order-detail-status">
+                  {selectedOrder.status}
+                </div>
               </div>
 
               {(selectedOrder.items || []).map((item) => (
-                <div key={item.id} style={{ marginTop: "20px" }}>
-                  <div className="order-title" style={{ fontSize: "24px" }}>{item.title}</div>
-                  <div className="order-date">{item.subtitle}</div>
-                  <pre
-                    style={{
-                      whiteSpace: "pre-wrap",
-                      background: "#101114",
-                      padding: "14px",
-                      borderRadius: "16px",
-                      color: "#fff",
-                      marginTop: "16px"
-                    }}
-                  >
-                    {item.hidden_content}
-                  </pre>
+                <div key={item.id} style={{ marginTop: "18px" }}>
+                  {item.image_url ? (
+                    <img
+                      src={item.image_url}
+                      alt={item.title}
+                      style={{
+                        width: "100%",
+                        borderRadius: "18px",
+                        marginBottom: "16px",
+                        display: "block",
+                        objectFit: "cover",
+                        maxHeight: "170px"
+                      }}
+                    />
+                  ) : null}
+
+                  <div className="order-detail-main-row">
+                    <div className="order-detail-product">
+                      <div className="order-detail-product-title">{item.title}</div>
+                      <div className="order-detail-product-subtitle">
+                        {item.subtitle}
+                      </div>
+                    </div>
+
+                    <div className="order-detail-price">
+                      €{Number(item.price).toFixed(2)}
+                    </div>
+                  </div>
+
+                  <div className="order-detail-row">
+                    <span>Référence</span>
+                    <strong>CMD-{selectedOrder.id}-{item.id}</strong>
+                  </div>
+
+                  <div className="order-detail-row">
+                    <span>Statut</span>
+                    <strong>{selectedOrder.status}</strong>
+                  </div>
+
+                  <div className="order-detail-row">
+                    <span>Date</span>
+                    <strong>{selectedOrder.created_at}</strong>
+                  </div>
+
+                  <div className="order-detail-row">
+                    <span>Produit</span>
+                    <strong>{item.title}</strong>
+                  </div>
+
+                  <div className="order-detail-row">
+                    <span>Sous-titre</span>
+                    <strong>{item.subtitle || "-"}</strong>
+                  </div>
+
+                  <div className="order-detail-content-box">
+                    <div className="order-detail-content-label">Contenu livré</div>
+                    <pre className="order-detail-content-text">
+                      {item.hidden_content}
+                    </pre>
+                  </div>
                 </div>
               ))}
 
-              <button className="details-btn" onClick={() => setSelectedOrder(null)}>
+              <button
+                className="details-btn"
+                onClick={() => setSelectedOrder(null)}
+              >
                 Retour
               </button>
             </div>
@@ -352,11 +407,18 @@ export default function App() {
                   <div className="status-badge done">{order.status}</div>
                 </div>
 
-                <button className="details-btn" onClick={() => openOrder(order.id)}>
+                <button
+                  className="details-btn"
+                  onClick={() => openOrder(order.id)}
+                >
                   Voir les détails
                 </button>
               </div>
             ))
+          )}
+
+          {orders.length === 0 && !selectedOrder && (
+            <p>Aucune commande.</p>
           )}
         </div>
       )}
