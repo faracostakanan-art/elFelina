@@ -15,6 +15,8 @@ export default function Admin() {
   const [userIdForBalance, setUserIdForBalance] = useState("");
   const [balanceAmount, setBalanceAmount] = useState("");
 
+  const [bulkProductsText, setBulkProductsText] = useState("");
+
   const loadProducts = async () => {
     try {
       const res = await fetch(`${API_URL}/api/admin/products`);
@@ -67,6 +69,71 @@ export default function Admin() {
         await loadProducts();
       } else {
         setMessage(data.error || "Erreur lors de l'ajout.");
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage("Erreur de connexion au serveur API.");
+    }
+  };
+
+  const addProductsBulk = async () => {
+    setMessage("");
+
+    if (!password || !bulkProductsText.trim()) {
+      setMessage("Remplis le mot de passe et la liste des produits.");
+      return;
+    }
+
+    const lines = bulkProductsText
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    const productsToAdd = [];
+
+    for (const line of lines) {
+      const parts = line.split("|").map((p) => p.trim());
+
+      if (parts.length < 4) {
+        setMessage("Chaque ligne doit contenir : titre | sous-titre | prix | contenu privé");
+        return;
+      }
+
+      const [bulkTitle, bulkSubtitle, bulkPrice, bulkHiddenContent] = parts;
+
+      if (!bulkTitle || !bulkPrice || !bulkHiddenContent || isNaN(Number(bulkPrice))) {
+        setMessage("Une ou plusieurs lignes sont invalides.");
+        return;
+      }
+
+      productsToAdd.push({
+        title: bulkTitle,
+        subtitle: bulkSubtitle,
+        price: Number(bulkPrice),
+        hidden_content: bulkHiddenContent
+      });
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/api/admin/products/bulk`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          password,
+          products: productsToAdd
+        })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setMessage(`${data.inserted} produit(s) ajoutés avec succès.`);
+        setBulkProductsText("");
+        await loadProducts();
+      } else {
+        setMessage(data.error || "Erreur lors de l'ajout en lot.");
       }
     } catch (error) {
       console.error(error);
@@ -191,6 +258,23 @@ export default function Admin() {
       <br /><br />
 
       <button onClick={addProduct}>Ajouter produit</button>
+
+      <hr style={{ margin: "30px 0" }} />
+
+      <h2>Ajouter plusieurs produits d’un coup</h2>
+
+      <textarea
+        placeholder={`Produit 1|Sous-titre 1|10.00|contenu privé 1
+Produit 2|Sous-titre 2|12.00|contenu privé 2
+Produit 3|Sous-titre 3|15.00|contenu privé 3`}
+        value={bulkProductsText}
+        onChange={(e) => setBulkProductsText(e.target.value)}
+        rows={10}
+        cols={50}
+      />
+      <br /><br />
+
+      <button onClick={addProductsBulk}>Ajouter les produits en lot</button>
 
       <hr style={{ margin: "30px 0" }} />
 
